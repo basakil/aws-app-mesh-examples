@@ -2,6 +2,18 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: app-yelb
+  labels:
+    mesh: yelb
+    appmesh.k8s.aws/sidecarInjectorWebhook: enabled
+---
+apiVersion: appmesh.k8s.aws/v1beta2
+kind: Mesh
+metadata:
+  name: yelb
+spec:
+  namespaceSelector:
+    matchLabels:
+      mesh: yelb
 ---
 apiVersion: v1
 kind: Service
@@ -100,6 +112,7 @@ spec:
         tier: frontend
         deploy_on: fargate
     spec:
+      serviceAccountName: appmesh-pod
       containers:
         - name: yelb-ui
           image: mreferre/yelb-ui:0.7
@@ -124,6 +137,7 @@ spec:
         tier: cache
         deploy_on: fargate
     spec:
+      serviceAccountName: appmesh-pod
       containers:
         - name: redis-server
           image: redis:4.0.2
@@ -148,6 +162,7 @@ spec:
         tier: backenddb
         deploy_on: fargate
     spec:
+      serviceAccountName: appmesh-pod
       containers:
         - name: yelb-db
           image: mreferre/yelb-db:0.5
@@ -172,6 +187,7 @@ spec:
         tier: middletier
         deploy_on: fargate
     spec:
+      serviceAccountName: appmesh-pod
       containers:
         - name: yelb-appserver
           image: mreferre/yelb-appserver:0.5

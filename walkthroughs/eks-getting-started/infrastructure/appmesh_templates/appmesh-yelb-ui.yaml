@@ -2,7 +2,7 @@ apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualNode
 metadata:
   name: yelb-ui
-  namespace: yelb
+  namespace: app-yelb
 spec:
   awsName: yelb-ui-virtual-node
   podSelector:
@@ -14,7 +14,7 @@ spec:
         protocol: http  
   serviceDiscovery:
     dns:
-      hostname: yelb-ui.yelb.svc.cluster.local
+      hostname: yelb-ui.app-yelb.svc.cluster.local
   backends:
     - virtualService:
        virtualServiceRef:
@@ -24,7 +24,7 @@ apiVersion: appmesh.k8s.aws/v1beta2
 kind: VirtualService
 metadata:
   name: yelb-ui
-  namespace: yelb
+  namespace: app-yelb
 spec:
   awsName: yelb-ui
   provider:
